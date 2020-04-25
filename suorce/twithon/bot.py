@@ -166,8 +166,6 @@ class bot:
         def packet_handler(bot):
             while True:
                 packet, tags = bot.read_packet()
-                print(packet)
-                print(tags)
                 
                 if len(packet) > 3:
                     if packet[1] == "PRIVMSG":
