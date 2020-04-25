@@ -1,7 +1,7 @@
-from distutils.core import setup
+from distutils.core import setup, find_packages
 setup(
   name = 'Twithon',
-  packages = ['Twithon'],
+  packages = find_packages(exclude=["compiler*"]),
   version = '0.0.1',
   license='MIT',
   description = 'A python wrapper over Twitch API to build bots and applications.',
