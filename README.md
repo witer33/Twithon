@@ -6,7 +6,7 @@
 # A simple bot
 
 ``` python
-from twithon.bot import bot, MessageHandler, filters, JoinHandler
+from twithon.bot import bot, filters
 
 bot = bot("username", "oauth:token")
 bot.connect()
