@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
   name = 'Twithon',
-  packages = ['Twithon'],
+  packages = ['suorce'],
   version = '0.0.1',
   license='MIT',
   description = 'A python wrapper over Twitch API to build bots and applications.',
