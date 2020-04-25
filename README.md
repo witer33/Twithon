@@ -1,6 +1,7 @@
 # Twithon
 ![Twithon logo](https://vps.witer33.com/Twithon/TwithonGithub.png)
 <p align="center"><b>An easy and fast framework for Twitch chatbot and Twitch API.</b></p>
+<p align="center"><i>Documentation: COMING SOON</i></p>
 
 # A simple bot
 
