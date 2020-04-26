@@ -8,10 +8,8 @@
 ``` python
 from twithon.bot import bot, filters
 
-bot = bot("username", "oauth:token")
+bot = bot("username", "oauth:token", channels=["channel"])
 bot.connect()
-
-bot.join("channel")
 
 @bot.on_message(filters.command("name"), filters.admin())
 def handler(client, message):
