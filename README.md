@@ -15,3 +15,9 @@ bot.connect()
 def handler(client, message):
     message.reply(message.user)
 ```
+
+# Installation
+
+```
+pip3 install twithon
+```
