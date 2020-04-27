@@ -32,7 +32,7 @@ class bot:
         """
         Send an array of string as a simple packet.
         """
-        self.sock.send(f"{' '.join(packet)}\n".encode())
+        self.sock.send("{}\n".format(' '.join(packet)).encode())
 
     def read_packet(self):
         """
@@ -94,37 +94,37 @@ class bot:
         self.sock.close()
 
     def join(self, target):
-        self.send_packet(["JOIN", f"#{target.lower()}"])
+        self.send_packet(["JOIN", "#{}".format(target.lower())])
 
     def left(self, target):
-        self.send_packet(["PART", f"#{target.lower()}"])
+        self.send_packet(["PART", "#{}".format(target.lower())])
 
     def send_message(self, channel, text):
-        self.send_packet(["PRIVMSG", f"#{channel.lower()}", f":{text}"])
+        self.send_packet(["PRIVMSG", "#{}".format(channel.lower()), ":{}".format(text)])
 
     def ban(self, channel, user):
-        self.send_message(channel, f"/ban {user}")
+        self.send_message(channel, "/ban {}".format(user))
 
     def unban(self, channel, user):
-        self.send_message(channel, f"/unban {user}")
+        self.send_message(channel, "/unban {}".format(user))
 
     def clear(self, channel):
         self.send_message(channel, "/clear")
 
     def color(self, channel, color):
-        self.send_message(channel, f"/color {color}")
+        self.send_message(channel, "/color {}".format(color))
 
     def delete(self, channel, id):
-        self.send_message(channel, f"/delete {id}")
+        self.send_message(channel, "/delete {}".format(id))
 
     def me(self, channel, text):
-        self.send_message(channel, f"/me {text}")
+        self.send_message(channel, "/me {}".format(text))
 
     def mod(self, channel, user):
-        self.send_message(channel, f"/mod {user}")
+        self.send_message(channel, "/mod {}".format(user))
 
     def unmod(self, channel, user):
-        self.send_message(channel, f"/unmod {user}")
+        self.send_message(channel, "/unmod {}".format(user))
 
     def add_handler(self, htype, func, filters=[]):
         self.handlers.append([htype, func, filters])
