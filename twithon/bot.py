@@ -84,7 +84,7 @@ class bot:
                 self.send_packet(["CAP", "REQ", ":twitch.tv/commands"])
                 self.send_packet(["CAP", "REQ", ":twitch.tv/tags"])
                 for channel in self.channels:
-                    self.join(channel)
+                    self.send_packet(["JOIN", "#{}".format(channel.lower())])
                 self.worker = self.start_handling()
         else:
             raise ConnectionError("Invalid response from server.")
@@ -94,9 +94,14 @@ class bot:
         self.sock.close()
 
     def join(self, target):
+        self.channels.append(target)
         self.send_packet(["JOIN", "#{}".format(target.lower())])
 
     def left(self, target):
+        try:
+            self.channels.remove(target)
+        except:
+            pass
         self.send_packet(["PART", "#{}".format(target.lower())])
 
     def send_message(self, channel, text):
@@ -325,6 +330,94 @@ class bot:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect()
 
+class module(bot):
+
+    def __init__(self, bot):
+        self.bot = bot
+        self.enabled = True
+        self.handlers()
+
+    def enable_check(self):
+        return (lambda message : self.enabled)
+
+    def disable(self):
+        self.enabled = False
+
+    def enable(self):
+        self.enabled = True
+
+    def on_message(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(MessageHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_notice(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(NoticeHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_join(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(JoinHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_left(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(LeftHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_clearchat(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(ClearChatHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_clearmsg(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(ClearMsgHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_roomstate(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(RoomStateHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_userstate(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(UserStateHandler, func, filters)
+            return None
+        return add_handler
+
+    def on_usernotice(self, *filters):
+        filters = list(filters)
+        filters.append(self.enable_check())
+        def add_handler(func):
+            self.bot.add_handler(UserNoticeHandler, func, filters)
+            return None
+        return add_handler
+
 class message:
 
     def __init__(self, channel, user, text, bot, tags):
@@ -471,6 +564,12 @@ class filters:
                 return lambda message : (message.text == str(pattern))
         else:
             return lambda message : (message.text != "")
+
+    def lower_text(pattern):
+        if type(pattern) == list:
+            return lambda message : (message.text.lower() in pattern)
+        else:
+            return lambda message : (message.text.lower() == str(pattern).lower())
 
     def user(pattern):
         if isinstance(pattern, re._pattern_type):
