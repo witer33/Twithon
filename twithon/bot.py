@@ -14,7 +14,7 @@ RoomStateHandler = 6
 UserNoticeHandler = 7
 UserStateHandler = 8
 
-class bot:
+class Bot:
 
     handlers = []
     stop = False
@@ -205,7 +205,7 @@ class bot:
                     if packet[1] == "PRIVMSG":
                         for handler in bot.handlers:
                             if handler[0] == 0:
-                                msg = message(packet[2][1:], packet[0].split("!")[0][1:], " ".join(packet[3:])[1:], bot, tags)
+                                msg = Message(packet[2][1:], packet[0].split("!")[0][1:], " ".join(packet[3:])[1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -215,7 +215,7 @@ class bot:
                     elif packet[1] == "NOTICE":
                         for handler in bot.handlers:
                             if handler[0] == 1:
-                                msg = notice(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
+                                msg = Notice(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -225,7 +225,7 @@ class bot:
                     elif packet[1] == "CLEARMSG":
                         for handler in bot.handlers:
                             if handler[0] == 5:
-                                msg = clearmsg(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
+                                msg = Clearmsg(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -235,7 +235,7 @@ class bot:
                     elif packet[1] == "USERNOTICE":
                         for handler in bot.handlers:
                             if handler[0] == 7:
-                                msg = usernotice(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
+                                msg = Usernotice(packet[2][1:], " ".join(packet[3:])[1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -246,7 +246,7 @@ class bot:
                     if packet[1] == "JOIN":
                         for handler in bot.handlers:
                             if handler[0] == 2:
-                                msg = join(packet[2][1:], packet[0][1:].split("!")[0], bot, tags)
+                                msg = Join(packet[2][1:], packet[0][1:].split("!")[0], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -256,7 +256,7 @@ class bot:
                     elif packet[1] == "PART":
                         for handler in bot.handlers:
                             if handler[0] == 3:
-                                msg = left(packet[2][1:], packet[0][1:].split("!")[0], bot, tags)
+                                msg = Left(packet[2][1:], packet[0][1:].split("!")[0], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -267,9 +267,9 @@ class bot:
                         for handler in bot.handlers:
                             if handler[0] == 4:
                                 if len(packet) == 4:
-                                    msg = clearchat(packet[2][1:], packet[3][1:], bot, tags)
+                                    msg = Clearchat(packet[2][1:], packet[3][1:], bot, tags)
                                 else:
-                                    msg = clearchat(packet[2][1:], None, bot, tags)
+                                    msg = Clearchat(packet[2][1:], None, bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -279,7 +279,7 @@ class bot:
                     elif packet[1] == "ROOMSTATE":
                         for handler in bot.handlers:
                             if handler[0] == 6:
-                                msg = roomstate(packet[2][1:], bot, tags)
+                                msg = Roomstate(packet[2][1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -289,7 +289,7 @@ class bot:
                     elif packet[1] == "USERSTATE":
                         for handler in bot.handlers:
                             if handler[0] == 8:
-                                msg = userstate(packet[2][1:], bot, tags)
+                                msg = Userstate(packet[2][1:], bot, tags)
                                 run = True
                                 for fil in handler[2]:
                                     if not fil(msg):
@@ -330,7 +330,7 @@ class bot:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect()
 
-class module(bot):
+class Module(Bot):
 
     def __init__(self, bot):
         self.bot = bot
@@ -418,7 +418,7 @@ class module(bot):
             return None
         return add_handler
 
-class message:
+class Message:
 
     def __init__(self, channel, user, text, bot, tags):
         self.channel = channel
@@ -451,7 +451,7 @@ class message:
     def unmod(self):
         self.bot.unmod(self.channel, self.user)
 
-class join:
+class Join:
 
     def __init__(self, channel, user, bot, tags):
         self.channel = channel
@@ -468,7 +468,7 @@ class join:
     def unban(self):
         self.bot.unban(self.channel, self.user)
 
-class left:
+class Left:
 
     def __init__(self, channel, user, bot, tags):
         self.channel = channel
@@ -485,7 +485,7 @@ class left:
     def unban(self):
         self.bot.unban(self.channel, self.user)
 
-class clearchat:
+class Clearchat:
 
     def __init__(self, channel, user, bot, tags):
         self.channel = channel
@@ -496,7 +496,7 @@ class clearchat:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class clearmsg:
+class Clearmsg:
 
     def __init__(self, channel, text, bot, tags):
         self.channel = channel
@@ -507,7 +507,7 @@ class clearmsg:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class roomstate:
+class Roomstate:
 
     def __init__(self, channel, bot, tags):
         self.channel = channel
@@ -517,7 +517,7 @@ class roomstate:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class userstate:
+class Userstate:
 
     def __init__(self, channel, bot, tags):
         self.channel = channel
@@ -527,7 +527,7 @@ class userstate:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class usernotice:
+class Usernotice:
 
     def __init__(self, channel, text, bot, tags):
         self.channel = channel
@@ -538,7 +538,7 @@ class usernotice:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class notice:
+class Notice:
     
     def __init__(self, channel, text, bot, tags):
         self.channel = channel
@@ -549,7 +549,7 @@ class notice:
     def __getattr__(self, name):
         return self.tags.get(name, None)
 
-class filters:
+class Filters:
 
     def invert(filter):
         return lambda data : not filter(data)
