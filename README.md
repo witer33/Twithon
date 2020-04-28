@@ -6,12 +6,12 @@
 # A simple bot
 
 ``` python
-from twithon.bot import bot, filters
+from twithon.bot import Bot, Filters
 
-bot = bot("username", "oauth:token", channels=["channel"])
+bot = Bot("username", "oauth:token", channels=["channel"])
 bot.connect()
 
-@bot.on_message(filters.command("name"), filters.admin())
+@bot.on_message(Filters.command("name"), Filters.admin())
 def handler(client, message):
     message.reply(message.user)
 ```
