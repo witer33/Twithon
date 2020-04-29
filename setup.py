@@ -10,7 +10,7 @@ setup(
   url = 'https://github.com/witer33/Twithon',
   download_url = 'https://github.com/witer33/Twithon/archive/v_0.0.3.1.tar.gz',
   keywords = ['Twitch', 'chatbot', 'IRC'],
-  install_requires=[],
+  install_requires=["requests"],
   classifiers=[
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
