@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'twithon',
   packages = ['twithon'],
-  version = '0.0.3.3',
+  version = '0.0.3.4',
   license='MIT',
   description = 'A python wrapper over Twitch API to build bots and applications.',
   author = 'Witer33',
   author_email = 'dev@witer33.com',
   url = 'https://github.com/witer33/Twithon',
-  download_url = 'https://github.com/witer33/Twithon/archive/v_0.0.3.3.tar.gz',
+  download_url = 'https://github.com/witer33/Twithon/archive/v_0.0.3.4.tar.gz',
   keywords = ['Twitch', 'chatbot', 'IRC'],
   install_requires=["requests"],
   classifiers=[
