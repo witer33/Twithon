@@ -600,4 +600,4 @@ class Filters:
         return lambda message : (message.user.lower() != message.bot.nick.lower())
 
     def admin():
-        return lambda message : ((message.user.lower() == message.channel) or bool(int(message.mod)))
+        return lambda message : ((message.user.lower() == message.channel) or bool(int(message.tags.mod)))
