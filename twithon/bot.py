@@ -27,12 +27,14 @@ class Bot:
         self.channels = channels
         self.workers = workers
         self.exes = queue.Queue()
+        self.packet_lock = threading.Lock()
 
     def send_packet(self, packet):
         """
         Send an array of string as a simple packet.
         """
-        self.sock.send("{}\n".format(' '.join(packet)).encode())
+        with self.packet_lock:
+            self.sock.send("{}\n".format(' '.join(packet)).encode())
 
     def read_packet(self):
         """
